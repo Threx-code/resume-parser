@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 class BaseParser(ABC):
 
     @abstractmethod
-    def url(self, criteria: Dict[str, str]) -> str:
+    def url(self, criteria: Dict[str, str]):
         pass
 
     @abstractmethod

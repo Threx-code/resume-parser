@@ -11,7 +11,7 @@ class ResumeParser:
 
     def fetch_resume(self) -> List[Dict[str, Any]]:
         if self.site == 'work_ua':
-            from src.parsers.sites.work_ua import WorkAuScrapper
+            from src.parsers.work_au import WorkAuScrapper
             scrapper = WorkAuScrapper()
             self.data = scrapper.scrape()
         return self.data

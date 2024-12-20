@@ -1,8 +1,4 @@
-from bs4 import BeautifulSoup
-import re
-
-from src.parsers.sites.work_ua import WorkAuScrapper
-from src.helpers.http_request import ScrapperRequest
+from src.parsers.work_au.work_ua_list import WorkAuListScrapper
 
 if __name__ == "__main__":
     criteria = {
@@ -13,12 +9,10 @@ if __name__ == "__main__":
         "salary_to": "2000",
     }
 
-    workAu = WorkAuScrapper()
+    workAu = WorkAuListScrapper()
     workAu.url(criteria)
     ee = workAu.parse_resume()
-
-
-
+    print("I see")
     print(ee)
 
     # salary_from = criteria.get("salary_from", "")
