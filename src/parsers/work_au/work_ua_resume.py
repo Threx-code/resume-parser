@@ -1,10 +1,6 @@
-from abc import ABC
 from typing import Dict, List, Any
-
 import re
 from src.helpers.http_request import ScrapperRequest
-from src.parsers.base.base_parser import BaseParser
-
 
 class WorkAuResumeScrapper:
 
