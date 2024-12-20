@@ -19,52 +19,56 @@ class WorkAuResumeScrapper:
 
 
     def get_resume(self) -> Dict[str, Any]:
-        link = self.applicant_data.get('link', '')
+        try:
+            link = self.applicant_data.get('link', '')
 
-        soup = ScrapperRequest(link).get_soup()
-        applicants_dirty_data = soup.find_all("div", class_="mt-0")
+            soup = ScrapperRequest(link).get_soup()
+            applicants_dirty_data = soup.find_all("div", class_="mt-0")
 
-        for data in applicants_dirty_data:
-            summary_data = data.find("div", id="add_info").text if data.find("div", id="add_info") else None
-            work_summary = {}
-            if summary_data:
-                work_summary =self._extract_sections(summary_data)
-
-
-            employment = data.find("dt", text="Employment:").find_next_sibling("dd").text \
-                if data.find("dt", text="Employment:") else None
-            ready_to_work = data.find("dt", text="Ready to work:").find_next_sibling("dd").text \
-                if data.find("dt", text="Ready to work:") else None
-
-            city_of_residence = data.find("dt", text="City of residence:").find_next_sibling("dd").text \
-                if data.find("dt", text="City of residence:") else None
-
-            education_data = data.find("h2", text="Education")
-            education_details = []
-            if education_data:
-                for education in education_data.find_next_siblings(["h2", "p"], class_="h4 strong-600 mt-lg sm:mt-xl"):
-                    school_name = ''
-                    description = ''
-                    if education.name == "h2":
-                        school_name = education.text.strip()
-                    elif education.name == "p":
-                        description = education.text.strip().replace("\n", " ")
-                    education_details.append({
-                        "school_name": school_name,
-                        "description": description
-                    })
+            for data in applicants_dirty_data:
+                summary_data = data.find("div", id="add_info").text if data.find("div", id="add_info") else None
+                work_summary = {}
+                if summary_data:
+                    work_summary =self._extract_sections(summary_data)
 
 
-            user_data= {
-                'employment': employment,
-                'ready_to_work': ready_to_work,
-                'city_of_residence': city_of_residence,
-                'education_details': education_details,
-                'work_summary': work_summary,
-            }
-            self.applicant_data['user_data'] = user_data
+                employment = data.find("dt", text="Employment:").find_next_sibling("dd").text \
+                    if data.find("dt", text="Employment:") else None
+                ready_to_work = data.find("dt", text="Ready to work:").find_next_sibling("dd").text \
+                    if data.find("dt", text="Ready to work:") else None
 
-            return self.applicant_data
+                city_of_residence = data.find("dt", text="City of residence:").find_next_sibling("dd").text \
+                    if data.find("dt", text="City of residence:") else None
+
+                education_data = data.find("h2", text="Education")
+                education_details = []
+                if education_data:
+                    for education in education_data.find_next_siblings(["h2", "p"], class_="h4 strong-600 mt-lg sm:mt-xl"):
+                        school_name = ''
+                        description = ''
+                        if education.name == "h2":
+                            school_name = education.text.strip()
+                        elif education.name == "p":
+                            description = education.text.strip().replace("\n", " ")
+                        education_details.append({
+                            "school_name": school_name,
+                            "description": description
+                        })
+
+
+                user_data= {
+                    'employment': employment,
+                    'ready_to_work': ready_to_work,
+                    'city_of_residence': city_of_residence,
+                    'education_details': education_details,
+                    'work_summary': work_summary,
+                }
+                self.applicant_data['user_data'] = user_data
+
+                return self.applicant_data
+
+        except Exception as e:
+            raise RuntimeError(f"An error occurred when fetching resume {e}") from e
 
         return {}
 

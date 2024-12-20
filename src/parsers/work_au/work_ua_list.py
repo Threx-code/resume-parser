@@ -22,24 +22,27 @@ class WorkAuListScrapper(BaseParser, ABC):
 
 
     def parse_resume(self) -> List[Dict[str, Any]]:
-        soup = ScrapperRequest(self.URL).get_soup()
-        resumes = []
-        dirty_resume_lists = soup.find_all("div", class_="resume-link")
+        try:
+            soup = ScrapperRequest(self.URL).get_soup()
+            resumes = []
+            dirty_resume_lists = soup.find_all("div", class_="resume-link")
 
-        for resume in dirty_resume_lists:
-            name_age_city = resume.find('p', class_="mt-xs mb-0").find_all("span")
-            name = name_age_city[0].text
-            age = name_age_city[1].text.replace("\xa0", " ") if len(name_age_city) > 1 else None
-            city = name_age_city[2].text if len(name_age_city) > 2 else None
-            link = f"{self.BASE_URL}{resume.select_one('a')['href']}"
-            title = resume.select_one("a").text.strip()
+            for resume in dirty_resume_lists:
+                name_age_city = resume.find('p', class_="mt-xs mb-0").find_all("span")
+                name = name_age_city[0].text
+                age = name_age_city[1].text.replace("\xa0", " ") if len(name_age_city) > 1 else None
+                city = name_age_city[2].text if len(name_age_city) > 2 else None
+                link = f"{self.BASE_URL}{resume.select_one('a')['href']}"
+                title = resume.select_one("a").text.strip()
 
-            resumes.append({
-                "title": title,
-                "link": link,
-                "applicant_name": name,
-                "age": age,
-                "city": city,
-            })
+                resumes.append({
+                    "title": title,
+                    "link": link,
+                    "applicant_name": name,
+                    "age": age,
+                    "city": city,
+                })
 
-        return resumes
+            return resumes
+        except Exception as e:
+            raise RuntimeError(f"An error occurred while parsing the resume: {e}") from e
