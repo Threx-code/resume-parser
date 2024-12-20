@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import re
 
 from src.parsers.sites.work_ua import WorkAuScrapper
 from src.helpers.http_request import ScrapperRequest
@@ -47,3 +48,13 @@ if __name__ == "__main__":
     #         "details": resume.select_one(".cv-details").text.strip()
     #     })
     # print(resumes)
+
+
+
+
+
+
+
+
+
+
