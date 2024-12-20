@@ -23,7 +23,7 @@ class ResumeSystem:
         for resume in self.resumes:
             resume["score"] = self.score(resume)
 
-        return sorted(self.resumes, key=lambda x: x[1], reverse=True)
+        return sorted(self.resumes, key=lambda x: x['score'], reverse=True)
 
 
 
