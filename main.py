@@ -1,4 +1,5 @@
 from src.parsers.work_au.work_ua_list import WorkAuListScrapper
+from src.parsers.work_au.work_ua_resume import WorkAuResumeScrapper
 
 if __name__ == "__main__":
     criteria = {
@@ -11,9 +12,19 @@ if __name__ == "__main__":
 
     workAu = WorkAuListScrapper()
     workAu.url(criteria)
-    ee = workAu.parse_resume()
-    print("I see")
-    print(ee)
+    resume_list = workAu.parse_resume()
+    resumes = []
+
+    for resume in resume_list:
+        user_data = WorkAuResumeScrapper({
+            "title": resume.get('title', ''),
+            "link": resume.get('link', ''),
+            "applicant_name": 'name',
+            "age": resume.get('age', ''),
+            "city": resume.get('city', ''),
+        }).get_resume()
+
+        print(user_data)
 
     # salary_from = criteria.get("salary_from", "")
     # salary_to = criteria.get("salary_to", "")

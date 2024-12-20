@@ -2,7 +2,6 @@ from abc import ABC
 from typing import Dict, List, Any
 from src.helpers.http_request import ScrapperRequest
 from src.parsers.base.base_parser import BaseParser
-from src.parsers.work_au.work_ua_resume import WorkAuResumeScrapper
 
 
 class WorkAuListScrapper(BaseParser, ABC):
@@ -33,25 +32,14 @@ class WorkAuListScrapper(BaseParser, ABC):
             age = name_age_city[1].text.replace("\xa0", " ") if len(name_age_city) > 1 else None
             city = name_age_city[2].text if len(name_age_city) > 2 else None
             link = f"{self.BASE_URL}{resume.select_one('a')['href']}"
-            title = resume.select_one("a").text.strip(),
+            title = resume.select_one("a").text.strip()
 
-
-            # resumes.append({
-            #     "title": title,
-            #     "link": link,
-            #     "applicant_name": name,
-            #     "age": age,
-            #     "city": city,
-            # })
-
-            user_data = WorkAuResumeScrapper({
+            resumes.append({
                 "title": title,
                 "link": link,
                 "applicant_name": name,
                 "age": age,
                 "city": city,
-            }).get_resume()
-
-            resumes.append(user_data)
+            })
 
         return resumes

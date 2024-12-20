@@ -60,7 +60,6 @@ class WorkAuResumeScrapper:
 
 
             user_data= {
-                'primary_details': self.applicant_data,
                 'employment': employment,
                 'ready_to_work': ready_to_work,
                 'city_of_residence': city_of_residence,
