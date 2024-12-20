@@ -82,7 +82,7 @@ class WorkAuResumeScrapper:
             end = matches[i + 1].start() if i + 1 < len(matches) else len(text_data)
             content = text_data[start:end].strip()
             if section_name:
-                section_data[section_name.lower()] = content.replace(" ", "\n").replace("\n", " ")
+                section_data[section_name.lower().replace(" ", "_")] = content.replace(" ", "\n").replace("\n", " ")
 
         return section_data
 

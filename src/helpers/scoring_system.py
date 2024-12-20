@@ -11,8 +11,10 @@ class ResumeSystem:
 
     def score(self, resume: Dict[str, Any]) -> float:
         score = 0
+        user_data = resume.get('user_data')
         for section, weight in self.weight.items():
-            section_content = resume.get("work_summary", {}).get(section, "").lower()
+            section_content = user_data.get("work_summary", {}).get(section, "").lower()
+
             if section_content:
                 score += weight
                 score += weight * 0.5 * sum(1 for keyword in self.desired_keywords[section] if keyword in section_content)
@@ -24,7 +26,4 @@ class ResumeSystem:
             resume["score"] = self.score(resume)
 
         return sorted(self.resumes, key=lambda x: x['score'], reverse=True)
-
-
-
 
